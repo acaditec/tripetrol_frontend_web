@@ -1,14 +1,19 @@
 import PropTypes from 'prop-types';
 import { SideBar, SidebarItem } from './Menu/SideBar';
 import { LayoutDashboard, LifeBuoy, Package, Receipt, Settings, PackagePlus, Coins, ListChecks, HelpingHand, BaggageClaim, Split, IterationCw } from 'lucide-react';
+import { Routes, Route } from 'react-router-dom';
+import { DistributionPage } from './Pages/DistributionPage';
+import { PurchasePage } from './Pages/PurchasePage';
+import { DashboardPage } from './Pages/DashboardPage';
 export function App(){
 
     return (
     <main className='App flex '>
         <SideBar>
-            <SidebarItem icon = { <LayoutDashboard size={20}/>} text= 'DashBoard' alert
+            <SidebarItem icon = { <LayoutDashboard size={20}/>} text= 'DashBoard' 
             />
-            <SidebarItem icon = { <PackagePlus size={20}/>} text= 'Compra de Producto' active
+            <SidebarItem icon = { <PackagePlus size={20}/>} text= 'Compra de Producto' path='purchase' 
+
             />
             <SidebarItem
                 icon = { <BaggageClaim size={20}/>}
@@ -20,8 +25,7 @@ export function App(){
             />
             <SidebarItem
                 icon = { <IterationCw size={20}/>}
-                text= 'Distribucion retorno'
-                
+                text= 'Distribucion retorno'               
             />
             <SidebarItem
                 icon = { <HelpingHand size={20}/>}
@@ -57,11 +61,12 @@ export function App(){
             />
             
         </SideBar>
-        <div className='flex flex-col w-full'>
-            <div className='h-12 w-fit bg-indigo-800 min-w-full rounded-md py-2.5 px-3 m-3 text-gray-100 font-bold'>
-                <h1>Hola</h1>
-            </div>
-        </div>
+                
+        <Routes>
+            <Route path='/' element={<DashboardPage/>}/>
+            <Route path='/distribution' element={<DistributionPage/>}/>
+            <Route path='/purchase' element={<PurchasePage/>}/>
+        </Routes>
     </main>
     );
 }
