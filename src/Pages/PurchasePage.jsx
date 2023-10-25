@@ -2,26 +2,45 @@ import { useEffect, useState  } from 'react'
 import { getCamiones } from '../helpers/getCamiones'
 import Select  from 'react-select';
 import { Controller, useForm } from 'react-hook-form';
-import { Hand } from 'lucide-react';
 import '../input.css'
 import { Switch } from '@mui/material';
+import {postCompra} from '../helpers/postCompras'
 
 
 
 export const PurchasePage = () => {
-  const [camiones, setCamiones] = useState([])
   const [opciones, setOpciones] = useState([])
   const [camionesSelected, setCamionesSelected] = useState([])
-  const onSubmit = (data) => alert(JSON.stringify(data)) 
+  const destinos = [{value: 1,label: 'Local'},
+  {value: 2,label: 'Provincia'},
+  {value: 3,label: 'Planta'}
+  
+]
 
+  const onSubmit = (data) => {
+    const camiones = data.SelecionCamion?.map(e=> {return {id: e,
+      garrafas_salida: data[e]}
+    }
+    )
+    const dataSend = { cheque: data.cheque,
+      monto: data.monto,
+      garrafas_compradas: data.garrafas_compradas,
+      id_destino: data.id_destino,
+      id_user: 2,
+      camiones      
+    }  
+    const resp = postCompra(dataSend)
+    alert(JSON.stringify(resp)) 
+  }
+// Carga de datos iniciales
   useEffect(
     () => {
       getListaCamiones()
     }, []
     )
-
-  const { handleSubmit, control } =  useForm();
-
+// Controlador de Formulario
+  const { register,handleSubmit, control, watch } =  useForm();
+// Funcion para extraccion de datos
   const getListaCamiones = async () => {
     const data = await getCamiones()
     const lista = await data.map(
@@ -32,7 +51,6 @@ export const PurchasePage = () => {
       }
     )
     await setOpciones(lista)
-    await setCamiones(data.camions)
   }
 
 
@@ -48,21 +66,21 @@ export const PurchasePage = () => {
                 <label className='label-form'>
                   Numero de Cheque
                 </label>
-                <input className='input-form'/>
+                <input className='input-form' {...register("cheque")}/>
               </div>
               <div className='w-full md:w-1/2 px-3'>
                 <label className='label-form'>
                   Monto del cheque
                 </label>
-                <input className='input-form'/>
+                <input className='input-form' type='number' step={0.01} {...register("monto")}/>
               </div>
             </div>
             <div className='flex flex-wrap -mx-3 mb-5'>
               <div className='w-full px-3'>
-                <label className='label-form'>
+                <label className='label-form' >
                   Numero de Garrafas
                 </label>
-                <input className='input-form'/>
+                <input className='input-form' {...register("garrafas_compradas")}/>
               </div>
             </div>
             <div className='flex flex-wrap -mx-3 mb-5'>
@@ -70,23 +88,22 @@ export const PurchasePage = () => {
                 <label className='label-form'>
                   Destino
                 </label>
-                <a className='leading-4 text-sm font-sans'>Local</a>
                 <Controller
                   control={control}
-                  name="switch-destino"
-                  defaultValue={false}
+                  name="id_destino"
                   render={
-                    ({field: { onChange,value}}) => (
-                      <Switch
-                        value={value}
-                        onChange={
-                          (val)=>onChange(val)
-                        }
+                    ({field: { onChange,value, ref}}) => (
+                      <Select
+                        ref={ref}
+                        name='id_destino'
+                        options={destinos}
+                        onChange={(val) => onChange(val.value)}
+                        placeholder='Selecione el destino'
+                        
                       />
                     )
                   }
                 />
-                <a className='leading-4 text-sm'>Provincia</a>
               </div>
             </div>
           <label className='label-form'>
@@ -110,6 +127,28 @@ export const PurchasePage = () => {
                 )
               }
             />
+
+            { watch("SelecionCamion")?.length ? 
+            (<ul>
+              {watch("SelecionCamion").map((e)=>{
+                return <li key={e}>
+                  <div className='flex flex-wrap -mx-3 mb-2 mt-2'>
+                      <div className='w-full md:w-1/2 px-3 mb-5 md:mb-0'>
+                        <label className='label-form'>
+                          {opciones.find(o=>o.value === e).label}
+                        </label>
+                      </div>
+                      <div className='w-full md:w-1/2 px-3'>
+                        <input className='input-form' type='number' {...register(`${e}`)}/>
+                      </div>
+                  </div>
+                </li>
+              })}
+            </ul>)
+             : <h1></h1>}             
+            <button type='submit' className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>
+              Aceptar
+            </button>
           </form>
         </div>
     </div>

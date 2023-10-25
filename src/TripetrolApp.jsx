@@ -1,11 +1,16 @@
-import PropTypes from 'prop-types';
 import { SideBar, SidebarItem } from './Menu/SideBar';
-import { LayoutDashboard, LifeBuoy, Package, Receipt, Settings, PackagePlus, Coins, ListChecks, HelpingHand, BaggageClaim, Split, IterationCw } from 'lucide-react';
+import { LayoutDashboard, LifeBuoy, Package, Receipt, Settings, PackagePlus, Coins, ListChecks, HelpingHand, BaggageClaim, Split, IterationCw, Truck } from 'lucide-react';
 import { Routes, Route } from 'react-router-dom';
-import { DistributionPage } from './Pages/DistributionPage';
 import { PurchasePage } from './Pages/PurchasePage';
 import { DashboardPage } from './Pages/DashboardPage';
-export function App(){
+import { TraslateOutPage } from './Pages/TraslateOutPage';
+import { TraslateInPage } from './Pages/TraslateInPage';
+import { DistributionOutPage } from './Pages/DistributionOutPage';
+import { DistribucionInPage } from './Pages/DistribucionInPage';
+import { PaymentsPage } from './Pages/PaymentsPage';
+import { SendMoneyPage } from './Pages/SendMoneyPage';
+import { BalancePage } from './Pages/BalancePage';
+export function TripetrolApp(){
 
     return (
     <main className='App flex '>
@@ -16,31 +21,42 @@ export function App(){
 
             />
             <SidebarItem
+                icon = { <Truck size={20}/>}
+                text= 'Traslado salida' 
+                path='traslateout'
+            />
+            <SidebarItem
                 icon = { <BaggageClaim size={20}/>}
-                text= 'Traslado retorno'                
+                text= 'Traslado retorno'   
+                path='traslatein' 
             />
             <SidebarItem
                 icon = { <Split size={20}/>}
-                text= 'Distribucion salida'
+                text= 'Distribucion salida' 
+                path='distributionout' 
             />
             <SidebarItem
                 icon = { <IterationCw size={20}/>}
-                text= 'Distribucion retorno'               
+                text= 'Distribucion retorno'    
+                path='distributionin'
             />
             <SidebarItem
                 icon = { <HelpingHand size={20}/>}
-                text= 'Cobranza de distribucion'
+                text= 'Cobranza de distribucion' 
+                path='payments'   
                 
             />
             <SidebarItem
                 icon = { <Receipt size={20}/>}
                 text= 'Remesas'
+                path='remesas'
                 
             />
             
             <SidebarItem
                 icon = { <Coins size={20}/>}
-                text= 'Saldos'
+                text = 'Saldos'
+                path ='balance'
                 
             />
             
@@ -64,8 +80,14 @@ export function App(){
                 
         <Routes>
             <Route path='/' element={<DashboardPage/>}/>
-            <Route path='/distribution' element={<DistributionPage/>}/>
             <Route path='/purchase' element={<PurchasePage/>}/>
+            <Route path='/traslateout' element={<TraslateOutPage/>}/>
+            <Route path='/traslatein' element={<TraslateInPage/>}/>
+            <Route path='/distributionout' element={<DistributionOutPage/>}/>
+            <Route path='/distributionin' element={<DistribucionInPage />}/>
+            <Route path='/payments' element={<PaymentsPage />}/>
+            <Route path='/remesas' element={<SendMoneyPage />}/>
+            <Route path='/balance' element={<BalancePage />}/>
         </Routes>
     </main>
     );

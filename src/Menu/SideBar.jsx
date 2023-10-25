@@ -1,10 +1,22 @@
 import {createContext, useContext, useState} from 'react'
 import {ChevronFirst, ChevronLast, MoreVertical} from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context';
 
 
 const SidebarContext = createContext()
 export const SideBar = ({children}) => {
+  const { user, logout } = useContext( AuthContext );
+    
+
+  const navigate = useNavigate();
+
+  const onLogout = () => {
+      logout();
+      navigate('/login', {
+          replace: true
+      });
+  }
   const [expanded, setExpanded] = useState(true)
   return (
     <aside className='h-screen'>
@@ -31,10 +43,12 @@ export const SideBar = ({children}) => {
         overflow-hidden transition-all
          ${expanded ? "w-52 ml-3": "w-0"}`}>
           <div className='leading-4'>
-            <h4 className='font-semibold'>Juan Fernandez</h4>
+            <h4 className='font-semibold'>{user?.name}</h4>
             <span className='text-xs text-gray-600'>jp.fernandez.jpfm@gmail.com</span>
           </div>
-          <MoreVertical size={20}/>
+          <button onClick={onLogout}>
+            <MoreVertical size={20}/>
+          </button>
         </div>
       </div>
      </nav>
