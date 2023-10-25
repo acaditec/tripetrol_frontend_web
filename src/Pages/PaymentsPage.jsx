@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { getCobrosIncompletos } from '../helpers/getCamiones';
 import Select  from 'react-select';
 import { putCompletarCobro } from '../helpers/postCompras';
