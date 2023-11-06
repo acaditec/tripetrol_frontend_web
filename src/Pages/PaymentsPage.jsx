@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { getCobrosIncompletos } from '../helpers/getCamiones';
 import Select  from 'react-select';
 import { putCompletarCobro } from '../helpers/postCompras';
+import { myAlerta } from '../ui/alerts';
 
 export const PaymentsPage = () => {
 
@@ -31,7 +32,7 @@ export const PaymentsPage = () => {
         )
         await setListaCobros(lista)
       }
-      const onSubmit = (data) => {
+      const onSubmit = async (data) => {
         const dataSend = {
           renta_cobrada: data.renta_cobrada!= "" ? data.renta_cobrada*1 : cobro?.monto_a_cobrar,
           renta_por_cobrar: data.renta_cobrada!= "" ? cobro?.monto_a_cobrar - data.renta_cobrada : 0,
@@ -39,8 +40,13 @@ export const PaymentsPage = () => {
           id_distribucion: cobro?.id_distribucion,
           id_user: 2,
         } 
-        putCompletarCobro(dataSend,cobro?.id)
-        alert(JSON.stringify(dataSend))
+        const resp = await putCompletarCobro(dataSend,cobro?.id)      
+        if(resp.status){
+          myAlerta(resp.status,'Formulario Exitoso',JSON.stringify(resp.msg),true)
+        }
+        else{
+          myAlerta(resp.status,'Error',resp.msg,true)
+        }
       }; 
   
   
@@ -122,16 +128,7 @@ export const PaymentsPage = () => {
                 </label>
                 <input className='input-form' defaultValue={cobro?.carga_vendida} />
               </div>
-            </div> 
-            
-            <div className='flex flex-wrap -mx-3 mb-5'>
-              <div className='w-full px-3'>
-                <label className='label-form'>
-                  Renta a Cobrar
-                </label>
-                <input className='input-form' defaultValue={cobro?.monto_a_cobrar} />
-              </div>
-            </div>  
+            </div>             
             <div className='flex flex-wrap -mx-3 mb-5'>
               <div className='w-full px-3'>
                 <label className='label-form'>
@@ -153,7 +150,7 @@ export const PaymentsPage = () => {
                 <label className='label-form'>
                   Renta por cobrar
                 </label>
-                <input className='input-form' type='number' value={(cobro?.monto_a_cobrar - watch('renta_cobrada'))>0 ? (cobro?.monto_a_cobrar - (watch('renta_cobrada')>0 ? watch('renta_cobrada') : 0)) : 0 } disabled />
+                <input className='input-form' type='number' value={(cobro?.monto_a_cobrar - watch('renta_cobrada'))>0 ? ((watch('renta_cobrada')>0 ? (cobro?.monto_a_cobrar - watch('renta_cobrada')) : 0)) : 0 } disabled />
               </div>
             </div> 
                       

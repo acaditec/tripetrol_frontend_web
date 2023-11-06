@@ -3,6 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import Select  from 'react-select';
 import { getCamionesSalida, getSaldoCamiones } from '../helpers/getCamiones';
 import { postSaldo } from '../helpers/postCompras';
+import { myAlerta } from '../ui/alerts';
 
 export const BalancePage = () => {
     
@@ -28,14 +29,20 @@ export const BalancePage = () => {
         await setListaCobros(lista)
       }
     
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
       const dataSend = {
         id_camion: cobro?.id_camion,
         monto: data.monto*1,
         id_user: 2
       }
-      alert(JSON.stringify(dataSend));
-      postSaldo(dataSend)
+      const resp = await postSaldo(dataSend)
+            
+      if(resp.status){
+        myAlerta(resp.status,'Formulario Exitoso',JSON.stringify(resp.msg),true)
+      }
+      else{
+        myAlerta(resp.status,'Error',resp.msg,true)
+      }
     } 
 
       return (

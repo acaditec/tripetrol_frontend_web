@@ -5,6 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import '../input.css'
 import { Switch } from '@mui/material';
 import {postCompra} from '../helpers/postCompras'
+import { myAlerta } from '../ui/alerts';
 
 
 
@@ -17,7 +18,7 @@ export const PurchasePage = () => {
   
 ]
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const camiones = data.SelecionCamion?.map(e=> {return {id: e,
       garrafas_salida: data[e]}
     }
@@ -29,8 +30,14 @@ export const PurchasePage = () => {
       id_user: 2,
       camiones      
     }  
-    const resp = postCompra(dataSend)
-    alert(JSON.stringify(resp)) 
+    const  resp = await postCompra(dataSend)
+    console.log(resp)
+    if(resp.status){
+      myAlerta(resp.status,'Formulario Exitoso',JSON.stringify(resp.msg),true)
+    }
+    else{
+      myAlerta(resp.status,'Error',resp.msg,true)
+    }
   }
 // Carga de datos iniciales
   useEffect(

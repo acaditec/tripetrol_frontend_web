@@ -7,12 +7,11 @@ export async function postAuth(email,pass){
             password: pass,  
     }
 }).then(
-        (response) => {  
-            console.log(response)          
+        (response) => {         
             return (response.data) 
         }
     ).catch( (error) => {
-        return false;
+        return error.response.data;
     })
     return resp;
 

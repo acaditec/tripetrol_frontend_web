@@ -3,6 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { getOrdenesSalida } from '../helpers/getCamiones';
 import Select  from 'react-select';
 import { putRetornoTraslado } from '../helpers/postCompras';
+import { myAlerta } from '../ui/alerts';
 
 export const TraslateInPage = () => {
     const { register,handleSubmit, control } =  useForm();
@@ -33,7 +34,7 @@ export const TraslateInPage = () => {
       await setlistaOrdenes(lista)      
     }
     //carga de datos
-    const onSubmit = (data) =>{
+    const onSubmit = async (data) =>{
       const dataPut = {
         id_destino: orden?.id_destino,
         garrafas_salida: orden?.garrafas_salida,
@@ -41,8 +42,15 @@ export const TraslateInPage = () => {
         garrafas_perdidas: data.garrafas_perdidas!= '0' ? data.garrafas_perdidas: 0,
         id_user_retorno: 2
       }
-      putRetornoTraslado(dataPut,orden.id)
-      alert(JSON.stringify(dataPut))
+      const resp = await putRetornoTraslado(dataPut,orden.id)
+      
+    console.log(resp)
+    if(resp.status){
+      myAlerta(resp.status,'Formulario Exitoso',JSON.stringify(resp.data),true)
+    }
+    else{
+      myAlerta(resp.status,'Error',JSON.stringify(resp.data),true)
+    }
     }; 
   
       return (

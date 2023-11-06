@@ -20,24 +20,23 @@ export const AuthProvider = ({children}) => {
 
     const login = async (name = '',email,pass) => {
             const resp = await postAuth(email,pass)
-            console.log(resp)  
-            if(resp){
+            if(resp.status){
               const usuario = resp.msg.usuario;
-              console.log(usuario)  
               const user = { id: usuario.id, 
                             name: `${usuario.nombre} ${usuario.apellidos}`,
                             
                             token:  usuario.token
                           }
-              console.log(user)
               const action = { type: types.login, payload: user }          
               localStorage.setItem('user', JSON.stringify( user ) );          
               dispatch(action);
+              return resp
 
             } else {              
               localStorage.removeItem('user');
               const action = { type: types.logout };
               dispatch(action);
+              return resp
             }
     }
     const logout = () => {

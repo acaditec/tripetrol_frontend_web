@@ -3,6 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { getCamionesSalida } from '../helpers/getCamiones';
 import Select  from 'react-select';
 import { putRetornoDistribucion } from '../helpers/postCompras';
+import { myAlerta } from '../ui/alerts';
 
 export const DistribucionInPage = () => {
     const { register,handleSubmit, control } =  useForm();        
@@ -32,7 +33,7 @@ export const DistribucionInPage = () => {
       await setListaCamiones(lista)
     }
     
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
       const dataSend = {        
         garrafas_salida: camion?.carga_salida,
         carga_retorno: data.carga_retorno!= "" ? data.carga_retorno :camion?.carga_salida,
@@ -40,8 +41,13 @@ export const DistribucionInPage = () => {
         carga_vendida: data.carga_vendida!= "" ? data.carga_vendida :camion?.carga_salida,
         id_user_retorno: 2
       }
-      putRetornoDistribucion(dataSend,camion.id)
-      alert(JSON.stringify(dataSend));
+      const resp = await putRetornoDistribucion(dataSend,camion.id)      
+      if(resp.status){
+        myAlerta(resp.status,'Formulario Exitoso',JSON.stringify(resp.msg),true)
+      }
+      else{
+        myAlerta(resp.status,'Error',resp.msg,true)
+      }
     }; 
 
       return (

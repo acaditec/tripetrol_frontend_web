@@ -2,6 +2,7 @@ import { useEffect, useState  } from 'react'
 import { Controller, useForm } from 'react-hook-form';
 import { getSaldo } from '../helpers/getCamiones';
 import { postRemesa } from '../helpers/postCompras';
+import { myAlerta } from '../ui/alerts';
 
 export const SendMoneyPage = () => {
     const [saldo, setSaldo] = useState();
@@ -17,14 +18,20 @@ export const SendMoneyPage = () => {
         await setSaldo(data)
       }
       
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
       const dataSend = {
         orden_remesa: data?.orden_remesa,
         monto: data?.monto*1,
         id_user: 2
       }
-      postRemesa(dataSend)
-      alert(JSON.stringify(dataSend))
+      const resp = await postRemesa(dataSend)
+      console.log(resp)
+      if(resp.status){
+        myAlerta(resp.status,'Formulario Exitoso',JSON.stringify(resp.data),true)
+      }
+      else{
+        myAlerta(resp.status,'Error',JSON.stringify(resp.data),true)
+      } 
     }; 
 
       return (

@@ -4,6 +4,11 @@ import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import '../input.css'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import { myAlerta } from '../ui/alerts';
+
+const MySwal = withReactContent(Swal)
 
 export const LoginPage = () => {
   
@@ -14,16 +19,19 @@ export const LoginPage = () => {
     const onLogin = () => {
 
     }
-    const onSubmit = (data) => {
+    const onSubmit = async (data) =>  {
       const lastPath = localStorage.getItem('lastPath') || '/';
-      login('Juan Pablo Fernandez', data.email, data.pass);
-
+      const resp = await login('Juan Pablo Fernandez', data.email, data.pass);
       navigate(
           lastPath, {
               replace: true
           }
       )
-      alert(JSON.stringify(data))
+      if(resp.status){
+        myAlerta(resp.status,'Bienvenido',resp.msg.usuario.nombre,false)
+      } else {        
+        myAlerta(resp.status,'Error',resp.msg,false)
+      }
     };
 
   return (
