@@ -10,6 +10,7 @@ import { DistribucionInPage } from './Pages/DistribucionInPage';
 import { PaymentsPage } from './Pages/PaymentsPage';
 import { SendMoneyPage } from './Pages/SendMoneyPage';
 import { BalancePage } from './Pages/BalancePage';
+import { ReportPage } from './Pages/ReportPAge';
 export function TripetrolApp(){
 
     return (
@@ -64,6 +65,12 @@ export function TripetrolApp(){
                 text= 'Aprobaciones pendientes'
                 
             />
+            <SidebarItem 
+                icon = { <Coins size={20}/>}
+                text = 'Reportes'
+                path ='reportes'
+                
+            />
             <hr className='my-3'/>
             <SidebarItem
                 icon = { <Settings size={20}/>}
@@ -88,6 +95,7 @@ export function TripetrolApp(){
             <Route path='/payments' element={<PaymentsPage />}/>
             <Route path='/remesas' element={<SendMoneyPage />}/>
             <Route path='/balance' element={<BalancePage />}/>
+            <Route path='/reportes' element={<ReportPage />}/>
         </Routes>
     </main>
     );
