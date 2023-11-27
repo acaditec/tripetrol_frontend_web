@@ -1,3 +1,41 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.input-form {
+    appearance: none;
+    display: block;
+    width: 100%;
+    --tw-bg-opacity: 1;
+    background-color: rgb(229 231 235 / var(--tw-bg-opacity));
+    --tw-text-opacity: 1;
+    color:rgb(55 65 81/ var(--tw-text-opacity));
+    --tw-border-opacity: 1;
+    border-color: rgb(229 231 235 /var(--tw-border-opacity));
+    border-radius: 0.25rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    line-height: 1.25;
+
+}
+.input-form:focus {
+    outline: 2px solid;
+    outline-width: 1px;
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+    --tw-border-opacity: 1;
+    border-color: rgb(107 114 128 / var(--tw-border-opacity));
+}
+.label-form{
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    --tw-text-opacity: 1;
+    color: rgb(55 65 81 / var(--tw-text-opacity));
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
